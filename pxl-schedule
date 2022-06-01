@@ -1,0 +1,35 @@
+import px
+# Read in the http_events table
+df = px.DataFrame(table='http_events', start_time='-10s')
+
+# Attach the pod and service metadata
+df.pod = df.ctx['pod']
+df.service = df.ctx['service']
+# Count the number of requests per pod and service
+df = df.groupby(['pod', 'service', 'req_path']).agg(
+  throughput=('latency', px.count),
+  time_=('time_', px.max),
+)
+
+# Change the denominator if you change start_time above.
+df.requests_per_s = df.throughput / 10
+
+px.export(df, px.otel.Data(
+  # endpoint arg not required if run in a plugin that provides the endpoint
+  resource={
+      # service.name is required by OpenTelemetry.
+      'service.name' : df.service,
+      'service.instance.id': df.pod,
+      'k8s.pod.name': df.pod,
+  },
+  data=[
+    px.otel.metric.Gauge(
+      name='http.throughput',
+      description='The number of messages sent per second',
+      value=df.requests_per_s,
+      attributes={
+        'req_path': df.req_path,
+      }
+    )
+  ]
+))
