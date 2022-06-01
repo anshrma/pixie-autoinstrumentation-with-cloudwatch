@@ -42,6 +42,8 @@ aws eks create-addon --addon-name adot --cluster-name REPLACE_ME
 
 * Create CRD for `OpenTelemetryCollector` which creates a GRPC OTLP receiver and CloudWatch as exporter
 
+**NOTE** - REPLACE_ME with AWS region id where CloudWatch metrics are sent.
+
 ```
 kubectl apply -f otel-crd.yaml
 ```

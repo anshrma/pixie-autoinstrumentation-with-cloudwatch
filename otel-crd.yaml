@@ -15,7 +15,7 @@ spec:
 
     exporters:
       awsemf:
-        region: us-east-2
+        region: REPLACE_ME
 
     service:
       pipelines:
