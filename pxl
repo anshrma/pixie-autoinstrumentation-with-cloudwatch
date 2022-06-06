@@ -17,7 +17,7 @@ df.requests_per_s = df.throughput / 10
 px.export(df, px.otel.Data(
   # endpoint arg not required if run in a plugin that provides the endpoint
   endpoint=px.otel.Endpoint(
-    url='my-collector-collector.default.svc.cluster.local:4317',
+    url='my-collector-collector.default.svc.cluster.local:443',
     insecure=True
   ),
   resource={
