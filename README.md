@@ -1,6 +1,11 @@
 # Use Case
 
-Enable auto instrumentation using Pixie agent, installed on a EKS Cluster and send eBPF metrics collected by Pixie agent to AWS CloudWatch for long term storage. As the [`SIGv4`](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) signing process to make AWS API call is handled in ADOT, expose a local OTEL endpoint using ADOT. Pixie auto instrumentation will export the data to this OTEL endpoint so that th entire logic of sending data to CloudWatch is handled by ADOT agent.
+Manually adding instrumentation to existing codebases can be a burden for teams. Pixie (a CNCF Sandbox Project) provides immediate, significant baseline visibility into the target system. Once deployed, it automatically collects full-body application requests from a variety of protocols, system metrics, and network-level data. Pixie's auto-instrumentation is powered by eBPF, a Linux kernel technology. Pixie agent also enables users to send data formatted in the OpenTelemetry format to any OpenTelemetry collector. 
+
+AWS Distro for OpenTelemetry Collector (ADOT Collector) is an AWS supported version of the upstream OpenTelemetry Collector and is distributed by Amazon. It enables users to send telemetry data to AWS CloudWatch Metrics. ADOT also enables users to configure a local OTLP(OpenTelemetry Protocol) endpoint as a push based receiver, to send data hence collected to AWS CloudWatch/AMP using IAM Roles for Service Account (IRSA). OTLP specification describes the encoding, transport, and delivery mechanism of telemetry data between telemetry sources (eBPF) , intermediate nodes such as collectors and telemetry backends (AWS CloudWatch/AMP).
+
+In this proof of concept, we will walk through the reference implementation and step by step on how to auto instrument EBPF data collection on a EKS Cluster using Pixie agent and then use ADOT with a local OTLP endpoint to send the data to AWS CloudWatch/AMP/AMG for querying, visualization and alerting .
+
 
 # Enabling ADOT EKS AddOn
 
